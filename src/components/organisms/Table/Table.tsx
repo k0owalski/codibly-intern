@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 import { useTypedDispatch, useTypedSelector } from 'hooks/useTypedRedux';
@@ -12,6 +12,8 @@ const Table: React.FC = () => {
   const { products } = useTypedSelector((state) => state);
 
   const [search, setSearch] = useSearchParams();
+  const [error, setError] = useState('');
+
   const dispatch = useTypedDispatch();
 
   const handleRowClick = () => null;
@@ -24,6 +26,8 @@ const Table: React.FC = () => {
   };
 
   useEffect(() => {
+    setError('');
+
     if (!search.get('page')) {
       search.set('page', '1');
 
@@ -46,6 +50,11 @@ const Table: React.FC = () => {
     })
       .then((res) => res.json())
       .then(({ total, total_pages, data }) => {
+        if (!data || data?.length === 0) {
+          setError('No records found :(');
+          return;
+        }
+
         if (Array.isArray(data)) {
           dispatch(
             setProducts({
@@ -54,7 +63,7 @@ const Table: React.FC = () => {
               data,
             })
           );
-        } else if (typeof data === 'object') {
+        } else
           dispatch(
             setProducts({
               total,
@@ -62,25 +71,15 @@ const Table: React.FC = () => {
               data: [data],
             })
           );
-        } else
-          dispatch(
-            setProducts({
-              total,
-              total_pages,
-              data: [],
-            })
-          );
       })
-      .catch();
+      .catch(() => setError('An error occured :('));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search, dispatch]);
 
   return (
     <StyledTable>
-      {(products.data &&
-        parseInt(search.get('page') || '1', 10) <= products.total_pages) ||
-      search.get('id') ? (
+      {!error ? (
         <>
           <ul className="product-list">
             <li className="product-item product-item-headings">
@@ -110,7 +109,7 @@ const Table: React.FC = () => {
         </>
       ) : (
         <>
-          <p className="product-list-err">Something went wrong :(</p>
+          <p className="product-list-err">{error}</p>
           <button
             className="product-list-err-return"
             type="button"
