@@ -1,7 +1,15 @@
 import React from 'react';
 
-function Root() {
-  return <div>Root</div>;
-}
+import Topbar from 'components/molecules/Topbar/Topbar';
+import Table from 'components/organisms/Table/Table';
+
+const Root: React.FC = () => {
+  return (
+    <>
+      <Topbar />
+      <Table />
+    </>
+  );
+};
 
 export default Root;
