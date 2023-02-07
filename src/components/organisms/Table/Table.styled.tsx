@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 
 const StyledTable = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
   width: 80%;
 
   margin: 0 auto;
@@ -10,6 +14,8 @@ const StyledTable = styled.div`
     display: grid;
     grid-template-columns: 1fr;
     gap: 1rem;
+
+    width: 100%;
 
     .product-item {
       width: 100%;
@@ -48,6 +54,20 @@ const StyledTable = styled.div`
         }
       }
     }
+  }
+
+  .product-list-err {
+    text-align: center;
+  }
+
+  .product-list-err-return {
+    margin: 2rem auto;
+    padding: 1rem;
+
+    color: #fafafa;
+    background-color: hsl(283, 53%, 38%);
+
+    border-radius: 0.25rem;
   }
 `;
 
