@@ -17,6 +17,14 @@ const Search: React.FC = () => {
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>): void => {
     if (event.key === 'e' || event.key === '+' || event.key === '-')
       event.preventDefault();
+
+    if (event.key === 'ENTER') {
+      if (event.currentTarget.value)
+        search.set('id', event.currentTarget.value);
+      else search.delete('id');
+
+      setSearch(search);
+    }
   };
 
   const handleSubmit = (event: SyntheticEvent): void => {
